@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "user_tbl")
@@ -26,15 +27,16 @@ public class UserEntity {
     private String lastName;
 
     @Column(unique = true)
-   
     private String email;
 
+    @JsonIgnore
     private String password;
+
     private Long mobile;
     private Boolean active;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(updatable = false) // Preventing the modification
+    @Column(updatable = false)
     private Date createdAt;
 
     private Long createdBy;
@@ -58,8 +60,9 @@ public class UserEntity {
         USER, ADMIN, MODERATOR
     }
 
-    // Add relationship with DepartmentEntity
     @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false) // Establish foreign key to department table
+    @JoinColumn(name = "department_id", nullable = false)
+    @JsonIgnore // Prevent circular reference or unnecessary data in JSON
     private DepartmentEntity department;
 }
+

@@ -1,21 +1,17 @@
 package com.cognizant.samservice.model;
 
-import java.util.List;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
 
 @Entity
 @Data
 @Table(name = "department")
 public class DepartmentEntity {
-	@Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -23,8 +19,10 @@ public class DepartmentEntity {
     private String description; // Optional description of the department
 
     @OneToMany(mappedBy = "department")
+    @JsonIgnoreProperties({"department", "password", "email", "createdAt", "updatedAt", "createdBy", "updatedBy", "employeeProjects"})
     private List<UserEntity> employees; // Employees belonging to the department
 
     @OneToMany(mappedBy = "department")
+    @JsonIgnoreProperties({"department", "employeeProjects", "softwareAllocations"})
     private List<ProjectEntity> projects; // Projects managed by the department
 }

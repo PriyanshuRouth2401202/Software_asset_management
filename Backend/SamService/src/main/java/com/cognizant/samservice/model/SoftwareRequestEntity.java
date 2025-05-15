@@ -1,15 +1,14 @@
 package com.cognizant.samservice.model;
 
+import com.cognizant.samservice.model.enums.RequestStatus;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
-
 @Entity
 @Data
-@Table(name = "user_software_allocation")
-public class UserSoftwareAllocationEntity {
+@Table(name = "software_request")
+public class SoftwareRequestEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,17 +17,16 @@ public class UserSoftwareAllocationEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnoreProperties({"department", "password", "email", "createdAt", "updatedAt", "createdBy", "updatedBy", "employeeProjects"})
-    private UserEntity user;
+    private UserEntity user;  // The user who is requesting
 
     @ManyToOne
-    @JoinColumn(name = "project_id", nullable = false)
-    @JsonIgnoreProperties({"department", "employeeProjects", "softwareAllocations"})
-    private ProjectEntity project;
-
-    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "software_id", nullable = false)
     @JsonIgnoreProperties({"project"})
-    private SoftwareEntity software;
+    private SoftwareEntity software;  // Requested software
 
-    private LocalDate allocationDate;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RequestStatus status;  // Enum instead of String ✅
+
+    private String adminResponse; // Admin comments
 }

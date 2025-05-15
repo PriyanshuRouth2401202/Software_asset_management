@@ -1,12 +1,7 @@
 package com.cognizant.samservice.model;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 @Entity
 @Data
@@ -20,7 +15,12 @@ public class SoftwareEntity
     private String version;
     private String licenseType;
     private String vendor;
-    private AtomicInteger count;
+    private Integer ActiveUser;
     private boolean isActive = true; // New field to track active status
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "project_id", nullable = false)
+    @JsonIgnoreProperties({"department", "employeeProjects", "softwareAllocations"})
+    private ProjectEntity project;  // Link to the project that uses this software
+
 
 }

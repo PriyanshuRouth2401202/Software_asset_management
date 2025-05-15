@@ -1,5 +1,6 @@
 package com.cognizant.samservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,6 +11,7 @@ import java.util.List;
 @Data
 @Table(name = "project")
 public class ProjectEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,11 +23,14 @@ public class ProjectEntity {
 
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
+    @JsonIgnoreProperties({"employees", "projects"})
     private DepartmentEntity department;
 
     @OneToMany(mappedBy = "project")
-    private List<UserSoftwareAllocationEntity> softwareAllocations; // Allocated software for the project
+    @JsonIgnoreProperties({"project", "user", "software"})
+    private List<UserSoftwareAllocationEntity> softwareAllocations;
 
     @OneToMany(mappedBy = "project")
-    private List<EmployeeProjectEntity> employeeProjects; // Employees working on the project
+    @JsonIgnoreProperties({"project", "employee"})
+    private List<EmployeeProjectEntity> employeeProjects;
 }
